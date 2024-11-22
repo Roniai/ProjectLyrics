@@ -11,6 +11,7 @@ export type TSong = {
 export type TLyrics = {
   verses: string[];
   chorus?: string;
+  isNumbered?: boolean;
 };
 
 export type Ttone =
