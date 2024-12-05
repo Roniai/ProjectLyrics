@@ -16,6 +16,7 @@ export type TLyrics = {
   bridge?: string;
   intro?: string;
   outro?: string;
+  structure?: string;
   isNumbered?: boolean;
 };
 
