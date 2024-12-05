@@ -4,13 +4,19 @@ export type TSong = {
   lyrics: TLyrics;
   author?: string;
   composer?: string;
-  date?: Date;
+  artist?: string;
+  date?: string;
   tone?: Ttone;
 };
 
 export type TLyrics = {
-  verses: string[];
-  chorus?: string;
+  verses?: string[];
+  preChorus?: string;
+  chorus?: string | string[];
+  bridge?: string;
+  intro?: string;
+  outro?: string;
+  structure?: string;
   isNumbered?: boolean;
 };
 
