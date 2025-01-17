@@ -2,6 +2,7 @@ import { TSong } from "@/type/song";
 
 export const lyrics: TSong[] = [
   {
+    id: 0,
     title: "Ry Jeso Loharanon'aina",
     subTitle: "FFPM 531",
     lyrics: {

@@ -1,4 +1,5 @@
 export type TSong = {
+  id: number;
   title: string;
   subTitle?: string;
   lyrics: TLyrics;
