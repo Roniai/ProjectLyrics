@@ -8,6 +8,7 @@ import { Entypo } from "@expo/vector-icons";
 
 type Props = {
   label: string;
+  color: string;
 };
 
 const HeaderDrawer = () => {
@@ -25,10 +26,10 @@ const HeaderDrawer = () => {
   );
 };
 
-export const ItemDrawer: React.FC<Props> = ({ label }) => {
+export const ItemDrawer: React.FC<Props> = ({ label, color }) => {
   return (
     <View style={styles.itemContainer}>
-      <Text style={Font.body}>{label}</Text>
+      <Text style={[Font.body, { color: color }]}>{label}</Text>
       <Entypo name="chevron-right" size={18} />
     </View>
   );

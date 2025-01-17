@@ -35,7 +35,7 @@ export default function Layout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
         screenOptions={{
-          drawerActiveTintColor: Color.greyscaleDarker,
+          drawerActiveTintColor: Color.greyscaleTextDisabled,
         }}
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
@@ -44,10 +44,25 @@ export default function Layout() {
             key={index}
             name={screen.name}
             options={{
-              drawerIcon: () => (
-                <MaterialCommunityIcons name={screen.icon as any} size={30} />
+              drawerIcon: ({ focused }) => (
+                <MaterialCommunityIcons
+                  name={
+                    focused
+                      ? (screen.icon.replace("-outline", "") as any)
+                      : (screen.icon as any)
+                  }
+                  color={focused ? Color.primaryLighter : Color.greyscaleDarker}
+                  size={30}
+                />
               ),
-              drawerLabel: () => <ItemDrawer label={screen.label} />,
+              drawerLabel: ({ focused }) => (
+                <ItemDrawer
+                  label={screen.label}
+                  color={
+                    focused ? Color.primaryLighter : Color.greyscaleTextBody
+                  }
+                />
+              ),
               title: screen.title,
             }}
           />
