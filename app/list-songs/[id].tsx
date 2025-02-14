@@ -7,6 +7,7 @@ import { TLyrics } from "@/type/song";
 
 enum StyleText {
   BOLD = "bold",
+  BOLD_ITALIC = "bold_italic",
   ITALIC = "italic",
   BLUE = "blue",
   YELLOW = "yellow",
@@ -21,8 +22,15 @@ const SongLyrics = () => {
       switch (style) {
         case StyleText.BOLD:
           return { ...acc, ...Font.bodySb };
+        case StyleText.BOLD_ITALIC:
+          return {
+            ...acc,
+            fontSize: vw * 4,
+            fontStyle: "italic",
+            fontWeight: "bold",
+          };
         case StyleText.ITALIC:
-          return { ...acc, fontStyle: "italic" };
+          return { ...acc, fontSize: vw * 4, fontStyle: "italic" };
         case StyleText.BLUE:
           return { ...acc, color: Color.primaryTextLabel };
         case StyleText.YELLOW:
@@ -69,6 +77,18 @@ const SongLyrics = () => {
         case "B2":
           acc.push({ text: lyrics?.chorus?.[2]!, styles: [StyleText.BOLD] });
           break;
+        case "C":
+          acc.push({
+            text: lyrics.bridge!,
+            styles: [StyleText.BOLD_ITALIC],
+          });
+          break;
+        case "D":
+          acc.push({ text: lyrics.outro!, styles: [StyleText.ITALIC] });
+          break;
+        case "E":
+          acc.push({ text: lyrics.intro!, styles: [StyleText.ITALIC] });
+          break;
       }
       return acc;
     }, [] as { text: string; number?: string; styles?: StyleText[] }[]);
@@ -76,7 +96,6 @@ const SongLyrics = () => {
     return (
       <View style={{ gap: Size.M }}>
         {render!.map((part, index) => {
-          console.log(part?.number + part?.text);
           return (
             <Text
               key={index}
@@ -96,7 +115,89 @@ const SongLyrics = () => {
   };
 
   const renderLyrics = (lyrics: TLyrics) => {
-    return <></>;
+    let render: { text: string; number?: string; styles?: StyleText[] }[] = [];
+
+    if (lyrics?.intro) {
+      render.push({ text: lyrics?.intro, styles: [StyleText.ITALIC] });
+    }
+
+    if (lyrics?.verses) {
+      if (lyrics?.isNumbered) {
+        render.push({
+          number: "1. ",
+          text: lyrics?.verses?.[0]!,
+        });
+      } else {
+        render.push({ text: lyrics?.verses?.[0]! });
+      }
+    }
+
+    if (lyrics?.preChorus) {
+      render.push({ text: lyrics?.preChorus, styles: [StyleText.BOLD] });
+    }
+
+    if (lyrics?.chorus) {
+      render.push({ text: lyrics?.chorus[0], styles: [StyleText.BOLD] });
+    }
+
+    if (lyrics?.verses && lyrics.verses.length > 1) {
+      if (lyrics?.isNumbered) {
+        render.push({
+          number: "2. ",
+          text: lyrics?.verses?.[1]!,
+        });
+      } else {
+        render.push({ text: lyrics?.verses?.[1]! });
+      }
+    }
+
+    if (lyrics?.chorus && lyrics?.chorus.length > 1) {
+      render.push({ text: lyrics?.chorus[1], styles: [StyleText.BOLD] });
+    }
+
+    if (lyrics?.verses && lyrics.verses.length > 2) {
+      for (let i = 2; i < lyrics.verses.length; i++) {
+        if (lyrics?.isNumbered) {
+          render.push({
+            number: (i + 1).toString() + ". ",
+            text: lyrics.verses[i],
+          });
+        } else {
+          render.push({ text: lyrics.verses[i] });
+        }
+      }
+    }
+
+    if (lyrics?.bridge) {
+      render.push({
+        text: lyrics?.bridge,
+        styles: [StyleText.BOLD_ITALIC],
+      });
+    }
+
+    if (lyrics?.outro) {
+      render.push({ text: lyrics?.outro, styles: [StyleText.ITALIC] });
+    }
+
+    return (
+      <View style={{ gap: Size.M }}>
+        {render!.map((part, index) => {
+          return (
+            <Text
+              key={index}
+              style={part?.styles ? getStyleText(part?.styles) : Font.body}
+            >
+              {part.number && (
+                <Text style={getStyleText([StyleText.YELLOW])}>
+                  {part.number}
+                </Text>
+              )}
+              {part.text}
+            </Text>
+          );
+        })}
+      </View>
+    );
   };
 
   return (
@@ -119,6 +220,7 @@ const SongLyrics = () => {
             <Text style={styles.title}>{song.title}</Text>
           </View>
         </View>
+        {song.subTitle && <Text style={styles.subTitle}>{song.subTitle}</Text>}
         <View style={styles.lyricsContainer}>
           {song.lyrics?.structure
             ? renderLyricsWithStructure(song.lyrics)
@@ -135,7 +237,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.white,
   },
   container: {
-    marginHorizontal: Size.M,
+    marginHorizontal: Size.XL,
   },
   titleContainer: {
     marginVertical: Size.L,
@@ -154,11 +256,17 @@ const styles = StyleSheet.create({
     paddingBottom: Size.S,
   },
   titleBlock: {
-    width: vw * 80,
+    width: vw * 76,
   },
   title: {
     ...Font.h3Sb,
     color: Color.primaryDefault,
+  },
+  subTitle: {
+    ...Font.caption,
+    marginTop: -Size.M,
+    textAlign: "right",
+    marginBottom: Size.M,
   },
   lyricsContainer: {},
 });
