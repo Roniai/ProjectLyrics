@@ -3,7 +3,7 @@ import { useLocalSearchParams } from "expo-router";
 import lyrics from "@/assets/data/songs";
 import { Color, Font, Size, vw } from "@/styles";
 import { ScrollView } from "react-native-gesture-handler";
-import { TLyrics } from "@/type/song";
+import { TLyrics, TSong } from "@/type/song";
 
 enum StyleText {
   BOLD = "bold",
@@ -200,6 +200,29 @@ const SongLyrics = () => {
     );
   };
 
+  const renderAC = (song: TSong) => {
+    if (song?.author || song?.composer) {
+      if (song?.author === song?.composer) {
+        return (
+          <Text style={Font.body}>
+            A/C : <Text style={Font.bodySb}>{song?.author}</Text>
+          </Text>
+        );
+      } else {
+        return (
+          <>
+            <Text style={Font.body}>
+              Tonony : <Text style={Font.bodySb}>{song?.author}</Text>
+            </Text>
+            <Text style={Font.body}>
+              Feony : <Text style={Font.bodySb}>{song?.composer}</Text>
+            </Text>
+          </>
+        );
+      }
+    }
+  };
+
   return (
     <ScrollView style={styles.mainContainer}>
       <View style={styles.container}>
@@ -220,12 +243,33 @@ const SongLyrics = () => {
             <Text style={styles.title}>{song.title}</Text>
           </View>
         </View>
-        {song.subTitle && <Text style={styles.subTitle}>{song.subTitle}</Text>}
+        {(song?.tone || song?.subTitle) && (
+          <View style={styles.subTitleContainer}>
+            {song?.tone && (
+              <Text style={[Font.body, styles.tone]}>
+                Dô dia : <Text style={Font.bodySb}>{song?.tone}</Text>
+              </Text>
+            )}
+            {song?.subTitle && (
+              <Text style={styles.subTitle}>{song.subTitle}</Text>
+            )}
+          </View>
+        )}
         <View style={styles.lyricsContainer}>
           {song.lyrics?.structure
             ? renderLyricsWithStructure(song.lyrics)
             : renderLyrics(song.lyrics)}
         </View>
+        {(song?.author || song?.date) && (
+          <View style={styles.footerContainer}>
+            {(song?.author || song?.composer) && <>{renderAC(song)}</>}
+            {song?.date && (
+              <Text style={Font.body}>
+                Daty : <Text style={Font.bodySb}>{song?.date}</Text>
+              </Text>
+            )}
+          </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -262,13 +306,29 @@ const styles = StyleSheet.create({
     ...Font.h3Sb,
     color: Color.primaryDefault,
   },
+  subTitleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   subTitle: {
     ...Font.caption,
     marginTop: -Size.M,
     textAlign: "right",
     marginBottom: Size.M,
   },
-  lyricsContainer: {},
+  tone: {
+    marginTop: -Size.L,
+    marginBottom: Size.M,
+  },
+  lyricsContainer: {
+    marginBottom: Size.XL,
+  },
+  footerContainer: {
+    alignItems: "flex-end",
+    borderTopColor: Color.greyscaleDefault,
+    borderTopWidth: 1,
+    paddingTop: Size.S,
+  },
 });
 
 export default SongLyrics;
