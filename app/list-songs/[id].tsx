@@ -1,9 +1,17 @@
-import { StyleSheet, Text, TextStyle, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import lyrics from "@/assets/data/songs";
 import { Color, Font, Size, vw } from "@/styles";
 import { ScrollView } from "react-native-gesture-handler";
 import { TLyrics, TSong } from "@/type/song";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useState } from "react";
 
 enum StyleText {
   BOLD = "bold",
@@ -16,29 +24,45 @@ enum StyleText {
 const SongLyrics = () => {
   const { id } = useLocalSearchParams();
   const song = lyrics.find((song) => song.id.toString() === id)!;
+  const [numberScale, setNumberScale] = useState<number>(1);
+  const [disableZoom, setDisableZoom] = useState<{
+    in?: boolean;
+    out?: boolean;
+  }>({ in: false, out: true });
+  const bodyText = {
+    fontSize: vw * 3.5 * numberScale,
+    lineHeight: vw * 5 * numberScale,
+  };
 
   const getStyleText = (styles: StyleText[]): TextStyle => {
     return styles.reduce((acc, style) => {
       switch (style) {
         case StyleText.BOLD:
-          return { ...acc, ...Font.bodySb };
+          return { ...acc, ...Font.bodySb, ...bodyText };
         case StyleText.BOLD_ITALIC:
           return {
             ...acc,
-            fontSize: vw * 4,
+            fontSize: vw * 4 * numberScale,
+            lineHeight: vw * 5.5 * numberScale,
             fontStyle: "italic",
             fontWeight: "bold",
           };
         case StyleText.ITALIC:
-          return { ...acc, fontSize: vw * 4, fontStyle: "italic" };
+          return {
+            ...acc,
+            fontSize: vw * 4 * numberScale,
+            lineHeight: vw * 5.5 * numberScale,
+            fontStyle: "italic",
+          };
         case StyleText.BLUE:
           return { ...acc, color: Color.primaryTextLabel };
         case StyleText.YELLOW:
           return {
             ...acc,
             ...Font.h4Sb,
+            fontSize: vw * 5 * numberScale,
             fontWeight: "bold",
-            lineHeight: vw * 6,
+            lineHeight: vw * 6 * numberScale,
             color: Color.secondaryTextLabel,
           };
         default:
@@ -99,7 +123,11 @@ const SongLyrics = () => {
           return (
             <Text
               key={index}
-              style={part?.styles ? getStyleText(part?.styles) : Font.body}
+              style={
+                part?.styles
+                  ? getStyleText(part?.styles)
+                  : { ...Font.body, ...bodyText }
+              }
             >
               {part.number && (
                 <Text style={getStyleText([StyleText.YELLOW])}>
@@ -185,7 +213,11 @@ const SongLyrics = () => {
           return (
             <Text
               key={index}
-              style={part?.styles ? getStyleText(part?.styles) : Font.body}
+              style={
+                part?.styles
+                  ? getStyleText(part?.styles)
+                  : { ...Font.body, ...bodyText }
+              }
             >
               {part.number && (
                 <Text style={getStyleText([StyleText.YELLOW])}>
@@ -223,55 +255,101 @@ const SongLyrics = () => {
     }
   };
 
+  const handleZoomText = (type: "zoomIn" | "zoomOut") => {
+    if (type === "zoomIn") {
+      if (numberScale < 2) {
+        setNumberScale((number) => number + 0.1);
+        setDisableZoom({ out: false });
+      } else {
+        setDisableZoom({ in: true });
+      }
+    } else {
+      if (numberScale > 1) {
+        setNumberScale((number) => number - 0.1);
+        setDisableZoom({ in: false });
+      } else {
+        setDisableZoom({ out: true });
+      }
+    }
+  };
+
   return (
-    <ScrollView style={styles.mainContainer}>
-      <View style={styles.container}>
-        <View style={styles.titleContainer}>
-          <View style={styles.idBlock}>
-            <Text
-              style={[
-                Font.h1Sb,
-                {
-                  color: Color.white,
-                },
-              ]}
-            >
-              {song.id}
-            </Text>
-          </View>
-          <View style={styles.titleBlock}>
-            <Text style={styles.title}>{song.title}</Text>
-          </View>
-        </View>
-        {(song?.tone || song?.subTitle) && (
-          <View style={styles.subTitleContainer}>
-            {song?.tone && (
-              <Text style={[Font.body, styles.tone]}>
-                Dô dia : <Text style={Font.bodySb}>{song?.tone}</Text>
+    <>
+      <ScrollView style={styles.mainContainer}>
+        <View style={styles.container}>
+          <View style={styles.titleContainer}>
+            <View style={styles.idBlock}>
+              <Text
+                style={[
+                  Font.h1Sb,
+                  {
+                    color: Color.white,
+                  },
+                ]}
+              >
+                {song.id}
               </Text>
-            )}
-            {song?.subTitle && (
-              <Text style={styles.subTitle}>{song.subTitle}</Text>
-            )}
+            </View>
+            <View style={styles.titleBlock}>
+              <Text style={styles.title}>{song.title}</Text>
+            </View>
           </View>
-        )}
-        <View style={styles.lyricsContainer}>
-          {song.lyrics?.structure
-            ? renderLyricsWithStructure(song.lyrics)
-            : renderLyrics(song.lyrics)}
+          {(song?.tone || song?.subTitle) && (
+            <View style={styles.subTitleContainer}>
+              {song?.tone && (
+                <Text style={[Font.body, styles.tone]}>
+                  Dô dia : <Text style={Font.bodySb}>{song?.tone}</Text>
+                </Text>
+              )}
+              {song?.subTitle && (
+                <Text style={styles.subTitle}>{song.subTitle}</Text>
+              )}
+            </View>
+          )}
+          <View style={styles.lyricsContainer}>
+            {song.lyrics?.structure
+              ? renderLyricsWithStructure(song.lyrics)
+              : renderLyrics(song.lyrics)}
+          </View>
+          {(song?.author || song?.date) && (
+            <View style={styles.footerContainer}>
+              {(song?.author || song?.composer) && <>{renderAC(song)}</>}
+              {song?.date && (
+                <Text style={Font.body}>
+                  Daty : <Text style={Font.bodySb}>{song?.date}</Text>
+                </Text>
+              )}
+            </View>
+          )}
         </View>
-        {(song?.author || song?.date) && (
-          <View style={styles.footerContainer}>
-            {(song?.author || song?.composer) && <>{renderAC(song)}</>}
-            {song?.date && (
-              <Text style={Font.body}>
-                Daty : <Text style={Font.bodySb}>{song?.date}</Text>
-              </Text>
-            )}
-          </View>
-        )}
+      </ScrollView>
+      <View style={styles.zoomContainer}>
+        <TouchableOpacity
+          onPress={() => handleZoomText("zoomIn")}
+          disabled={disableZoom.in}
+        >
+          <MaterialCommunityIcons
+            name="plus-circle"
+            size={28}
+            color={
+              disableZoom.in ? Color.greyscaleDefault : Color.greyscaleDarker
+            }
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => handleZoomText("zoomOut")}
+          disabled={disableZoom.out}
+        >
+          <MaterialCommunityIcons
+            name="minus-circle"
+            size={28}
+            color={
+              disableZoom.out ? Color.greyscaleDefault : Color.greyscaleDarker
+            }
+          />
+        </TouchableOpacity>
       </View>
-    </ScrollView>
+    </>
   );
 };
 
@@ -328,6 +406,14 @@ const styles = StyleSheet.create({
     borderTopColor: Color.greyscaleDefault,
     borderTopWidth: 1,
     paddingTop: Size.S,
+    marginBottom: Size.BIG,
+  },
+  zoomContainer: {
+    position: "absolute",
+    bottom: Size.L,
+    right: Size.L,
+    flexDirection: "row",
+    gap: Size.S,
   },
 });
 
