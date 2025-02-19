@@ -20,7 +20,7 @@ export const Color = {
   // Grey Scale
   white: "#FFFFFF",
   greyscaleSubtle: "#F2F1F3",
-  greyscaleDefault: "#E8E7E9",
+  greyscaleDefault: "#D1D0D2",
   greyscaleDarker: "#343239",
   greyscaleDisabled: "#E8E7E9",
 

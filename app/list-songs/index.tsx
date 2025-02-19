@@ -2,6 +2,7 @@ import lyrics from "@/assets/data/songs";
 import { Color, Font, Size, vw } from "@/styles";
 import { TSong } from "@/type/song";
 import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Slot, router } from "expo-router";
 import { useState } from "react";
 import {
   FlatList,
@@ -15,6 +16,7 @@ import {
 type ItemLyricsProps = {
   id: number;
   title: string;
+  onPress?: () => void;
 };
 
 type SearchInputProps = {
@@ -22,9 +24,9 @@ type SearchInputProps = {
   onChange: (value: string) => void;
 };
 
-const ItemLyrics: React.FC<ItemLyricsProps> = ({ id, title }) => {
+const ItemLyrics: React.FC<ItemLyricsProps> = ({ id, title, onPress }) => {
   return (
-    <TouchableOpacity style={styles.itemContainer}>
+    <TouchableOpacity style={styles.itemContainer} onPress={onPress}>
       <Text style={[Font.h5Sb, { color: Color.primaryTextLabel }]}>{id}</Text>
       <Text style={[Font.body, { flex: 1, marginLeft: Size.M }]}>{title}</Text>
       <Entypo name="chevron-right" size={18} />
@@ -48,7 +50,7 @@ const SearchInput: React.FC<SearchInputProps> = ({ placeholder, onChange }) => {
   );
 };
 
-const ListLyrics = () => {
+const ListSongsLyrics = () => {
   const [filteredLyrics, setFilteredLyrics] = useState<TSong[]>(lyrics);
 
   const handleSearch = (value: any) => {
@@ -65,6 +67,7 @@ const ListLyrics = () => {
 
   return (
     <View style={styles.mainContainer}>
+      <Slot />
       <SearchInput
         placeholder="Laharana na lohateny..."
         onChange={handleSearch}
@@ -77,6 +80,12 @@ const ListLyrics = () => {
             key={`${item.id}-${index}`}
             id={item.id}
             title={item.title}
+            onPress={() => {
+              router.push({
+                pathname: "/list-songs/[id]",
+                params: { id: item.id },
+              });
+            }}
           />
         )}
       />
@@ -111,4 +120,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListLyrics;
+export default ListSongsLyrics;
