@@ -3,7 +3,7 @@ export enum EPositionVerse {
   RIGHT = "right",
 }
 
-export const HOME_BODY = {
+export const BODY_TEXT = {
   intro:
     "Fifaliana ho an'ny VLM 67ha ny manolotra anao ity amboaran-kira ity." +
     " Ahitanao ny hiran'ny VLM 67ha sy ireo hira hafa izay efa nohirainy hatramin'ny nanombohan'ny fisian'ny Chorale VLM 67ha tamin'ny taona 2004." +
@@ -16,7 +16,7 @@ export const HOME_BODY = {
   body: "",
 };
 
-export const HOME_VERSES = {
+export const VERSES_TEXT = {
   intro: {
     verse: "Kolosiana 3.16",
     body: "Aoka ny tenin'i Kristy hitoetra betsaka ao aminareo amin'ny fahendrena rehetra, dia mifampianara ka mifananara amin'ny salamo sy ny fihirana ary ny tonon-kiram-panahy, mihira amin'ny fahasoavana ao am-ponareo ho an'Andriamanitra. ",
