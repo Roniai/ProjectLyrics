@@ -4,7 +4,14 @@ import Carousel from "@/components/Carousel";
 import SubTitle from "@/components/SubTitle";
 import Title from "@/components/Title";
 import { AVATAR_DATA, IMAGES, IMAGES_CAROUSEL } from "@/constants/Images";
-import { BODY_TEXT, CONTACT, VERSES_TEXT } from "@/constants/Texts";
+import {
+  ASSIGNMENTS,
+  BODY_TEXT,
+  CONTACT,
+  LABEL,
+  TITLE,
+  VERSES_TEXT,
+} from "@/constants/Texts";
 import { Color, Font, Size, vh, vw } from "@/styles";
 import {
   StyleSheet,
@@ -17,121 +24,63 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 
 const Biography = () => {
+  type PropsAssignment = {
+    title: string;
+    assignments: {
+      label: string;
+      details: string;
+    }[];
+  };
+
+  const renderAssignments: React.FC<PropsAssignment> = ({
+    title,
+    assignments,
+  }) => {
+    return (
+      <>
+        <SubTitle label={title} />
+        <View style={styles.listContainer}>
+          {assignments.map((assignment, index) => (
+            <Text style={Font.subtitleSb} key={index}>
+              - {assignment.label} :
+              <Text style={Font.subtitle}> {assignment.details}</Text>
+            </Text>
+          ))}
+        </View>
+      </>
+    );
+  };
+
   return (
     <ScrollView style={styles.mainContainer}>
       <View style={styles.bodyContainer}>
-        <Title title={"VLM 67ha"} />
+        <Title title={TITLE.hope} />
         <Text style={Font.subtitle}>{BODY_TEXT.definition}</Text>
         <Image source={IMAGES.logo} style={styles.image} />
         <BibleVerse verseBody={VERSES_TEXT.vina} />
         <BibleVerse verseBody={VERSES_TEXT.slogan} />
         <BibleVerse verseBody={VERSES_TEXT.value} />
-        <Title title={"ASA MISIONA"} color="grey" />
+        <Title title={TITLE.assignment} color="grey" />
         <Text style={Font.subtitle}>{BODY_TEXT.assignment}</Text>
 
-        <SubTitle label={"FISOROHANA (Prévention)"} />
-        <View style={styles.listContainer}>
-          <Text style={Font.subtitleSb}>
-            - Fanabeazana sy fiofanana :{" "}
-            <Text style={Font.subtitle}>
-              Toriteny sy fampianarana, lasy fiofanana, isa-telovolana,
-              zaikabe...
-            </Text>
-          </Text>
-          <Text style={Font.subtitleSb}>
-            - Fanantanjahan-tena sy fialam-boly :{" "}
-            <Text style={Font.subtitle}>
-              Sport, foot, basket, lalao iarahan'ny besinimaro...
-            </Text>
-          </Text>
-          <Text style={Font.subtitleSb}>
-            - Hetsika ara-kolotsaina :{" "}
-            <Text style={Font.subtitle}>
-              Carnaval, festival des talents, danse...
-            </Text>
-          </Text>
-        </View>
+        {renderAssignments(ASSIGNMENTS.prev)}
         <Carousel data={IMAGES_CAROUSEL[0].images} delay={7000} />
 
-        <SubTitle label={"FANENTANANA (Sensibilisation)"} />
-        <View style={styles.listContainer}>
-          <Text style={Font.subtitleSb}>
-            - Eo anivon'ny fiangonana :{" "}
-            <Text style={Font.subtitle}>
-              Ao amin'ny FLM 67ha, amin'ny Alahadin'ny VLM, amin'ny volanan'ny
-              VLM...
-            </Text>
-          </Text>
-          <Text style={Font.subtitleSb}>
-            - Eny anivon'ny sekoly :{" "}
-            <Text style={Font.subtitle}>
-              Manentana ny mpianatra tsy hirona amin'ny zava-mahadomelina satria
-              izy ireny no hoavin'ny firenena.
-            </Text>
-          </Text>
-          <Text style={Font.subtitleSb}>
-            - Eny anivon'ny "quartier" :{" "}
-            <Text style={Font.subtitle}>
-              Fanentanana sy fampianarana ny mpiara-monina fa ratsy ny
-              zava-mahadomelina ary mitaona ireo tanora tsy hiditra amin'izany.
-            </Text>
-          </Text>
-          <Text style={Font.subtitleSb}>
-            - Eny an-dalambe (animation mobile) :{" "}
-            <Text style={Font.subtitle}>
-              Mandeha ambony camion manao fanentanana toy ireny manao
-              propagandy, miteny eny an-dalambe toy ireny mpitoriteny amin'ny
-              fiangonana zandriny ireny.
-            </Text>
-          </Text>
-        </View>
+        {renderAssignments(ASSIGNMENTS.pub)}
         <Carousel data={IMAGES_CAROUSEL[1].images} delay={6000} />
 
-        <SubTitle label={"FANARENANA (Réhabilitation)"} />
-        <View style={styles.listContainer}>
-          <Text style={Font.subtitleSb}>
-            - Hetsika Manga :{" "}
-            <Text style={Font.subtitle}>
-              Fanentanana sy fanarenana ialohavan'ny fampianarana maromaro
-              mandritry ny fotoana maharitra.
-            </Text>
-          </Text>
-          <Text style={Font.subtitleSb}>
-            - Cure de désintoxication :{" "}
-            <Text style={Font.subtitle}>
-              Fandraisana an-tanana ireo olona te hiala amin'ny
-              zava-mahadomelina ka entina tsaboina.
-            </Text>
-          </Text>
-          <Text style={Font.subtitleSb}>
-            - Vondrom-Bavaka Manga na VBM :{" "}
-            <Text style={Font.subtitle}>
-              Fotoana iray itondrana am-bavaka ireo olona voagejan'ny
-              zava-mahadomelina sy ireo fianakaviany izay mijaly noho izany.
-              Isaky ny Sabotsy faran'ny volana, @ 02 - 03:30 ora tolakandro izy
-              ity nanomboka ity taona 2025 ity.
-            </Text>
-          </Text>
-          <Text style={Font.subtitleSb}>
-            - Centre d'Ecoute et de Réhabilitation :{" "}
-            <Text style={Font.subtitle}>
-              Ivotoerana fihainoana sy fanoroana hevitra, fandraisana an-tanana
-              ireo olona voagejan'ny zava-mahadomelina sy ireo fianakaviany izay
-              mijaly.
-            </Text>
-          </Text>
-        </View>
+        {renderAssignments(ASSIGNMENTS.rea)}
         <Carousel data={IMAGES_CAROUSEL[2].images} delay={7000} />
 
-        <Title title={"MPIKAMBANA SY RAFITRA"} color="grey" />
-        <SubTitle label={"MPIKAMBANA"} />
+        <Title title={TITLE.memberSys} color="grey" />
+        <SubTitle label={TITLE.member} />
         <Text style={[Font.subtitle, { marginTop: -Size.M }]}>
           {BODY_TEXT.member}
         </Text>
         <Text
           style={[Font.caption, { textAlign: "right", marginBottom: -Size.M }]}
         >
-          Tournage Clip Tsy irery ianao - Sept 2024
+          {LABEL.clip}
         </Text>
         <Image
           source={IMAGES.member}
@@ -149,48 +98,43 @@ const Biography = () => {
           resizeMode="contain"
         />
 
-        <SubTitle label={"RAFITRA"} />
+        <SubTitle label={TITLE.systeme} />
         <Text style={[Font.subtitle, { marginTop: -Size.M }]}>
           {BODY_TEXT.systeme}
         </Text>
         <Text style={Font.subtitle}>{BODY_TEXT.bureau}</Text>
         <View style={styles.avatarContainer}>
-          <Avatar
-            imageSource={AVATAR_DATA.pdt.uri}
-            name={AVATAR_DATA.pdt.name}
-            title={AVATAR_DATA.pdt.title}
-          />
-          <Avatar
-            imageSource={AVATAR_DATA.vp.uri}
-            name={AVATAR_DATA.vp.name}
-            title={AVATAR_DATA.vp.title}
-          />
-          <Avatar
-            imageSource={AVATAR_DATA.tres.uri}
-            name={AVATAR_DATA.tres.name}
-            title={AVATAR_DATA.tres.title}
-          />
+          {Object.values(AVATAR_DATA)
+            .slice(0, 3)
+            .map((avatar, index) => (
+              <Avatar
+                key={index}
+                imageSource={avatar.uri}
+                name={avatar.name}
+                title={avatar.title}
+              />
+            ))}
         </View>
         <View
           style={[styles.avatarContainer, { justifyContent: "space-evenly" }]}
         >
-          <Avatar
-            imageSource={AVATAR_DATA.sec1.uri}
-            name={AVATAR_DATA.sec1.name}
-            title={AVATAR_DATA.sec1.title}
-          />
-          <Avatar
-            imageSource={AVATAR_DATA.sec2.uri}
-            name={AVATAR_DATA.sec2.name}
-            title={AVATAR_DATA.sec2.title}
-          />
+          {Object.values(AVATAR_DATA)
+            .slice(3)
+            .map((avatar, index) => (
+              <Avatar
+                key={index}
+                imageSource={avatar.uri}
+                name={avatar.name}
+                title={avatar.title}
+              />
+            ))}
         </View>
 
         <Text style={Font.subtitle}>{BODY_TEXT.comite}</Text>
         <Text
           style={[Font.caption, { textAlign: "right", marginBottom: -Size.M }]}
         >
-          Komity VLM 67ha - 2023-2027
+          {LABEL.comite}
         </Text>
         <Image
           source={IMAGES.comite}
@@ -202,7 +146,7 @@ const Biography = () => {
           resizeMode="cover"
         />
 
-        <SubTitle label={"ANTOKO MPIHIRA"} />
+        <SubTitle label={TITLE.chorale} />
         <Text style={[Font.subtitle, { marginTop: -Size.M }]}>
           {BODY_TEXT.chorale}
         </Text>
@@ -214,7 +158,7 @@ const Biography = () => {
         <Text
           style={[Font.caption, { textAlign: "right", marginBottom: -Size.M }]}
         >
-          Coachs VLM 67ha - 2023-2027
+          {LABEL.coachs}
         </Text>
         <Image
           source={IMAGES.coachs}
@@ -258,7 +202,7 @@ const Biography = () => {
               onPress={() => Linking.openURL(`${CONTACT.page}`)}
             >
               <Text style={[styles.contactText, { width: vw * 70 }]}>
-                Vokovokomanga Fanantenana Croixbleue - VLM 67Ha
+                {LABEL.facebook}
               </Text>
             </TouchableOpacity>
           </View>
