@@ -1,16 +1,31 @@
-import { Color, Font, Size } from "@/styles";
+import { Color, Font } from "@/styles";
 import { Text, StyleSheet } from "react-native";
 
-export const Title = ({ title }: { title: string }) => {
-  return <Text style={styles.title}>{title}</Text>;
+type Props = {
+  title: string;
+  color?: "blue" | "grey";
+};
+
+export const Title: React.FC<Props> = ({ title, color = "blue" }) => {
+  return (
+    <Text
+      style={[
+        styles.title,
+        {
+          color:
+            color === "grey" ? Color.greyscaleDarker : Color.primaryLighter,
+        },
+      ]}
+    >
+      {title}
+    </Text>
+  );
 };
 
 const styles = StyleSheet.create({
   title: {
     ...Font.h4Sb,
-    color: Color.primaryLighter,
     textAlign: "center",
-    marginBottom: Size.M,
   },
 });
 
