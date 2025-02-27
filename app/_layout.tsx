@@ -10,6 +10,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { SplashScreen } from "expo-router";
 import { useEffect } from "react";
+import { StatusBar } from "expo-status-bar";
 
 export default function Layout() {
   const [loaded] = useFonts({
@@ -33,6 +34,7 @@ export default function Layout() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      <StatusBar style="dark" />
       <Drawer
         screenOptions={{
           drawerActiveTintColor: Color.greyscaleTextDisabled,
