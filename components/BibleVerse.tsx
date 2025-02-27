@@ -1,4 +1,4 @@
-import { EPositionVerse } from "@/constants/TextBody";
+import { EPositionVerse } from "@/constants/Texts";
 import { Color, Font, Size } from "@/styles";
 import { View, Text } from "react-native";
 

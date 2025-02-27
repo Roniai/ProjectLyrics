@@ -13,6 +13,9 @@ web-build/
 # custom
 assets/data
 !assets/data/example.ts
+assets/images/gallery
+constants/
+!constants/Colors.ts
 
 # macOS
 .DS_Store

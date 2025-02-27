@@ -5,7 +5,7 @@ import {
   ItemDrawer,
 } from "@/components/navigation/drawer-navigation/drawer-content/CustomDrawerContent";
 import { Color } from "@/styles";
-import { screensDrawer } from "@/assets/data/screens-drawer";
+import { SCREENS_DRAWER } from "@/constants/Screens";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { SplashScreen } from "expo-router";
@@ -39,7 +39,7 @@ export default function Layout() {
         }}
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
-        {screensDrawer.map((screen, index) => (
+        {SCREENS_DRAWER.map((screen, index) => (
           <Drawer.Screen
             key={index}
             name={screen.name}
