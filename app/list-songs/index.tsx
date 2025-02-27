@@ -27,7 +27,7 @@ type SearchInputProps = {
 const ItemLyrics: React.FC<ItemLyricsProps> = ({ id, title, onPress }) => {
   return (
     <TouchableOpacity style={styles.itemContainer} onPress={onPress}>
-      <Text style={[Font.h5Sb, { color: Color.primaryTextLabel }]}>{id}</Text>
+      <Text style={[Font.h5Sb, { color: Color.primaryLighter }]}>{id}</Text>
       <Text style={[Font.body, { flex: 1, marginLeft: Size.M }]}>{title}</Text>
       <Entypo name="chevron-right" size={18} />
     </TouchableOpacity>
