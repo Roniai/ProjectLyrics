@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
   },
   title: {
     ...Font.h3Sb,
-    color: Color.primaryDefault,
+    color: Color.primaryLighter,
   },
   subTitleContainer: {
     flexDirection: "row",

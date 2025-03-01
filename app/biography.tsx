@@ -82,21 +82,26 @@ const Biography = () => {
         >
           {LABEL.clip}
         </Text>
-        <Image
-          source={IMAGES.member}
-          style={{
-            height: vh * 65,
-            width: Size.width,
-            alignSelf: "center",
-            marginBottom: -Size.M,
-          }}
-          resizeMode="contain"
-        />
-        <Image
-          source={IMAGES.member2}
-          style={{ height: vh * 52, width: Size.width, alignSelf: "center" }}
-          resizeMode="contain"
-        />
+        <View style={styles.memberContainer}>
+          <Image
+            source={IMAGES.member}
+            style={{
+              height: vh * 60,
+              width: Size.width - Size.L,
+              alignSelf: "center",
+            }}
+            resizeMode="cover"
+          />
+          <Image
+            source={IMAGES.member2}
+            style={{
+              height: vh * 50,
+              width: Size.width - Size.L,
+              alignSelf: "center",
+            }}
+            resizeMode="cover"
+          />
+        </View>
 
         <SubTitle label={TITLE.systeme} />
         <Text style={[Font.subtitle, { marginTop: -Size.M }]}>
@@ -119,7 +124,7 @@ const Biography = () => {
           style={[styles.avatarContainer, { justifyContent: "space-evenly" }]}
         >
           {Object.values(AVATAR_DATA)
-            .slice(3)
+            .slice(3, 5)
             .map((avatar, index) => (
               <Avatar
                 key={index}
@@ -242,6 +247,10 @@ const styles = StyleSheet.create({
   contactText: {
     ...Font.bodySb,
     color: Color.primaryTextLabel,
+  },
+  memberContainer: {
+    flexDirection: "column",
+    gap: Size.XS3,
   },
 });
 
