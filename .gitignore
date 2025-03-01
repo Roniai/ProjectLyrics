@@ -13,7 +13,7 @@ web-build/
 # custom
 assets/data
 !assets/data/example.ts
-assets/images/gallery
+assets/images
 constants/
 !constants/Colors.ts
 
