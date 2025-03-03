@@ -5,6 +5,7 @@ import {
 } from "@react-navigation/drawer";
 import { Font, Size, vw } from "@/styles";
 import { Entypo } from "@expo/vector-icons";
+import { IMAGES } from "@/constants/Images";
 
 type Props = {
   label: string;
@@ -14,10 +15,7 @@ type Props = {
 const HeaderDrawer = () => {
   return (
     <View style={styles.header}>
-      <Image
-        source={require("../../../../assets/images/logo-hope.png")}
-        style={styles.image}
-      />
+      <Image source={IMAGES.logo} style={styles.image} />
       <View style={styles.text}>
         <Text style={Font.h5B}>Tononkira</Text>
         <Text style={Font.body}>VLM 67ha</Text>
