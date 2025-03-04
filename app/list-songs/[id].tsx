@@ -243,12 +243,16 @@ const SongLyrics = () => {
       } else {
         return (
           <>
-            <Text style={Font.body}>
-              Tonony : <Text style={Font.bodySb}>{song?.author}</Text>
-            </Text>
-            <Text style={Font.body}>
-              Feony : <Text style={Font.bodySb}>{song?.composer}</Text>
-            </Text>
+            {song?.author && song?.author !== "" && (
+              <Text style={Font.body}>
+                Tonony : <Text style={Font.bodySb}>{song?.author}</Text>
+              </Text>
+            )}
+            {song?.composer && song?.composer !== "" && (
+              <Text style={Font.body}>
+                Feony : <Text style={Font.bodySb}>{song?.composer}</Text>
+              </Text>
+            )}
           </>
         );
       }
@@ -311,12 +315,17 @@ const SongLyrics = () => {
               ? renderLyricsWithStructure(song.lyrics)
               : renderLyrics(song.lyrics)}
           </View>
-          {(song?.author || song?.date) && (
+          {(song?.author || song?.date || song?.artist) && (
             <View style={styles.footerContainer}>
               {(song?.author || song?.composer) && <>{renderAC(song)}</>}
               {song?.date && (
                 <Text style={Font.body}>
                   Daty : <Text style={Font.bodySb}>{song?.date}</Text>
+                </Text>
+              )}
+              {song?.artist && (
+                <Text style={[Font.subtitle, { fontStyle: "italic" }]}>
+                  {song?.artist}
                 </Text>
               )}
             </View>
