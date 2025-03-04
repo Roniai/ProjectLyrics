@@ -67,7 +67,6 @@ const ListSongsLyrics = () => {
 
   return (
     <View style={styles.mainContainer}>
-      <Slot />
       <SearchInput
         placeholder="Laharana na lohateny..."
         onChange={handleSearch}
