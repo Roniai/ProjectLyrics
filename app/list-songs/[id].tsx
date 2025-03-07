@@ -315,19 +315,25 @@ const SongLyrics = () => {
               ? renderLyricsWithStructure(song.lyrics)
               : renderLyrics(song.lyrics)}
           </View>
-          {(song?.author || song?.date || song?.artist) && (
+          {(song?.author || song?.composer || song?.date || song?.artist) && (
             <View style={styles.footerContainer}>
               {(song?.author || song?.composer) && <>{renderAC(song)}</>}
+              {song?.artist && (
+                <Text style={Font.body}>
+                  V.O : <Text style={Font.bodySb}>{song?.artist}</Text>
+                </Text>
+              )}
               {song?.date && (
                 <Text style={Font.body}>
                   Daty : <Text style={Font.bodySb}>{song?.date}</Text>
                 </Text>
               )}
-              {song?.artist && (
+              {/** @todo: italic style */}
+              {/* {song?.artist && (
                 <Text style={[Font.subtitle, { fontStyle: "italic" }]}>
                   {song?.artist}
                 </Text>
-              )}
+              )} */}
             </View>
           )}
         </View>
