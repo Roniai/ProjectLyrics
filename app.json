@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "hope-lyrics",
+    "name": "Hope Lyrics",
     "slug": "hope-lyrics",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -26,10 +26,7 @@
       "bundler": "metro",
       "output": "static"
     },
-    "plugins": [
-      "expo-router",
-      "expo-font"
-    ],
+    "plugins": ["expo-router", "expo-font"],
     "experiments": {
       "typedRoutes": true
     },
