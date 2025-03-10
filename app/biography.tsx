@@ -7,6 +7,7 @@ import { AVATAR_DATA, IMAGES, IMAGES_CAROUSEL } from "@/constants/Images";
 import {
   ASSIGNMENTS,
   BODY_TEXT,
+  COACHS,
   CONTACT,
   LABEL,
   TITLE,
@@ -165,15 +166,24 @@ const Biography = () => {
         >
           {LABEL.coachs}
         </Text>
-        <Image
-          source={IMAGES.coachs}
-          style={{
-            height: vh * 30,
-            width: Size.width - Size.XL3,
-            alignSelf: "center",
-          }}
-          resizeMode="cover"
-        />
+        <View style={styles.coachContainer}>
+          <View style={styles.coachNameContainer}>
+            {COACHS.map((coach) => (
+              <View style={styles.coachNameBlock}>
+                <Text style={Font.subtitle}>Coach {coach.toUpperCase()}</Text>
+              </View>
+            ))}
+          </View>
+          <Image
+            source={IMAGES.coachs}
+            style={{
+              height: vh * 30,
+              width: Size.width - Size.XL3,
+              alignSelf: "center",
+            }}
+            resizeMode="cover"
+          />
+        </View>
 
         <Text style={Font.subtitle}>{BODY_TEXT.contact}</Text>
         <View style={[styles.listContainer, { gap: Size.S }]}>
@@ -251,6 +261,23 @@ const styles = StyleSheet.create({
   memberContainer: {
     flexDirection: "column",
     gap: Size.XS3,
+  },
+  coachContainer: {
+    height: vh * 30,
+    width: Size.width - Size.XL3,
+  },
+  coachNameContainer: {
+    position: "absolute",
+    bottom: Size.M,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignSelf: "center",
+    gap: Size.M,
+    zIndex: 10,
+  },
+  coachNameBlock: {
+    backgroundColor: Color.white,
+    paddingHorizontal: Size.XS3,
   },
 });
 
