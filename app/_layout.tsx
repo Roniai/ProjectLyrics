@@ -1,21 +1,18 @@
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Drawer } from "expo-router/drawer";
 import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+  CustomDrawerContent,
+  ItemDrawer,
+} from "@/components/navigation/drawer-navigation/drawer-content/CustomDrawerContent";
+import { Color } from "@/styles";
+import { SCREENS_DRAWER } from "@/constants/Screens";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
+import { SplashScreen } from "expo-router";
 import { useEffect } from "react";
-import "react-native-reanimated";
+import { StatusBar } from "expo-status-bar";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
-
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+export default function Layout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     Poppins_Regular: require("../assets/fonts/Poppins-Regular.ttf"),
@@ -36,11 +33,43 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <StatusBar style="dark" />
+      <Drawer
+        screenOptions={{
+          drawerActiveTintColor: Color.greyscaleTextDisabled,
+        }}
+        drawerContent={(props) => <CustomDrawerContent {...props} />}
+      >
+        {SCREENS_DRAWER.map((screen, index) => (
+          <Drawer.Screen
+            key={index}
+            name={screen.name}
+            options={{
+              drawerIcon: ({ focused }) => (
+                <MaterialCommunityIcons
+                  name={
+                    focused
+                      ? (screen.icon.replace("-outline", "") as any)
+                      : (screen.icon as any)
+                  }
+                  color={focused ? Color.primaryLighter : Color.greyscaleDarker}
+                  size={30}
+                />
+              ),
+              drawerLabel: ({ focused }) => (
+                <ItemDrawer
+                  label={screen.label}
+                  color={
+                    focused ? Color.primaryLighter : Color.greyscaleTextBody
+                  }
+                />
+              ),
+              title: screen.title,
+            }}
+          />
+        ))}
+      </Drawer>
+    </GestureHandlerRootView>
   );
 }
