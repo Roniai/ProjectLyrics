@@ -1,4 +1,5 @@
 import {
+  FlatList,
   StyleSheet,
   Text,
   TextStyle,
@@ -23,7 +24,9 @@ enum StyleText {
 
 const SongLyrics = () => {
   const { id } = useLocalSearchParams();
-  const song = lyrics.find((song) => song.id.toString() === id)!;
+  const selectedIndex = lyrics.findIndex((song) => song.id.toString() === id);
+  const startIndex = selectedIndex !== -1 ? selectedIndex : 0;
+
   const [numberScale, setNumberScale] = useState<number>(1);
   const [disableZoom, setDisableZoom] = useState<{
     in?: boolean;
@@ -279,65 +282,84 @@ const SongLyrics = () => {
 
   return (
     <>
-      <ScrollView style={styles.mainContainer}>
-        <View style={styles.container}>
-          <View style={styles.titleContainer}>
-            <View style={styles.idBlock}>
-              <Text
-                style={[
-                  Font.h1Sb,
-                  {
-                    color: Color.white,
-                  },
-                ]}
-              >
-                {song.id}
-              </Text>
-            </View>
-            <View style={styles.titleBlock}>
-              <Text style={styles.title}>{song.title}</Text>
-            </View>
+      <FlatList
+        data={lyrics}
+        horizontal
+        pagingEnabled
+        initialScrollIndex={startIndex}
+        getItemLayout={(_, index) => ({
+          length: Size.width,
+          offset: Size.width * index,
+          index,
+        })}
+        showsHorizontalScrollIndicator={false}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => (
+          <View style={{ width: Size.width }}>
+            <ScrollView
+              style={styles.mainContainer}
+              showsVerticalScrollIndicator={false}
+            >
+              <View style={styles.container}>
+                <View style={styles.titleContainer}>
+                  <View style={styles.idBlock}>
+                    <Text style={[Font.h1Sb, { color: Color.white }]}>
+                      {item.id}
+                    </Text>
+                  </View>
+                  <View style={styles.titleBlock}>
+                    <Text style={styles.title}>{item.title}</Text>
+                  </View>
+                </View>
+
+                {(item?.tone || item?.subTitle) && (
+                  <View style={styles.subTitleContainer}>
+                    {item?.tone && (
+                      <Text style={[Font.body, styles.tone]}>
+                        Dô dia : <Text style={Font.bodySb}>{item?.tone}</Text>
+                      </Text>
+                    )}
+                    {item?.subTitle && (
+                      <Text style={styles.subTitle}>{item.subTitle}</Text>
+                    )}
+                  </View>
+                )}
+
+                <View style={styles.lyricsContainer}>
+                  {item.lyrics?.structure
+                    ? renderLyricsWithStructure(item.lyrics)
+                    : renderLyrics(item.lyrics)}
+                </View>
+
+                {(item?.author ||
+                  item?.composer ||
+                  item?.date ||
+                  item?.artist) && (
+                  <View style={styles.footerContainer}>
+                    {(item?.author || item?.composer) && <>{renderAC(item)}</>}
+                    {item?.artist && (
+                      <Text style={Font.body}>
+                        V.O : <Text style={Font.bodySb}>{item?.artist}</Text>
+                      </Text>
+                    )}
+                    {item?.date && (
+                      <Text style={Font.body}>
+                        Daty : <Text style={Font.bodySb}>{item?.date}</Text>
+                      </Text>
+                    )}
+                    {/** @todo: italic style */}
+                    {/* {song?.artist && (
+                      <Text style={[Font.subtitle, { fontStyle: "italic" }]}>
+                        {song?.artist}
+                      </Text>
+                    )} */}
+                  </View>
+                )}
+              </View>
+            </ScrollView>
           </View>
-          {(song?.tone || song?.subTitle) && (
-            <View style={styles.subTitleContainer}>
-              {song?.tone && (
-                <Text style={[Font.body, styles.tone]}>
-                  Dô dia : <Text style={Font.bodySb}>{song?.tone}</Text>
-                </Text>
-              )}
-              {song?.subTitle && (
-                <Text style={styles.subTitle}>{song.subTitle}</Text>
-              )}
-            </View>
-          )}
-          <View style={styles.lyricsContainer}>
-            {song.lyrics?.structure
-              ? renderLyricsWithStructure(song.lyrics)
-              : renderLyrics(song.lyrics)}
-          </View>
-          {(song?.author || song?.composer || song?.date || song?.artist) && (
-            <View style={styles.footerContainer}>
-              {(song?.author || song?.composer) && <>{renderAC(song)}</>}
-              {song?.artist && (
-                <Text style={Font.body}>
-                  V.O : <Text style={Font.bodySb}>{song?.artist}</Text>
-                </Text>
-              )}
-              {song?.date && (
-                <Text style={Font.body}>
-                  Daty : <Text style={Font.bodySb}>{song?.date}</Text>
-                </Text>
-              )}
-              {/** @todo: italic style */}
-              {/* {song?.artist && (
-                <Text style={[Font.subtitle, { fontStyle: "italic" }]}>
-                  {song?.artist}
-                </Text>
-              )} */}
-            </View>
-          )}
-        </View>
-      </ScrollView>
+        )}
+      />
       <View style={styles.zoomContainer}>
         <TouchableOpacity
           onPress={() => handleZoomText("zoomIn")}
