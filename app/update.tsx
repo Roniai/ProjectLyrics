@@ -9,15 +9,19 @@ import {
 } from "@/constants/Texts";
 import { Color, Font, Size } from "@/styles";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { useRef, useState } from "react";
 import { ProgressBar, Snackbar } from "react-native-paper";
 import Popup from "@/components/Popup";
-import { requestStoragePermission } from "@/utils/permission";
 import * as IntentLauncher from "expo-intent-launcher";
 import * as FileSystem from "expo-file-system";
-import * as MediaLibrary from "expo-media-library";
 
 const Update = () => {
   const [progress, setProgress] = useState(0);
@@ -30,48 +34,62 @@ const Update = () => {
 
   let fileUri = FileSystem.documentDirectory + NAME_APK_FILE;
   const downloadApk = async () => {
-    const granted = await requestStoragePermission();
-    console.log(granted);
-    if (!granted) {
-      alert(UPDATE.permission);
-      return;
-    }
+    Linking.openURL(LINK_DOWNLOAD_APK);
+    return;
 
-    setPopupVisible(true);
+    /** @todo: use permission and save file */
+    // const granted = await requestStoragePermission();
+    // console.log(granted);
+    // if (!granted) {
+    //   alert(UPDATE.permission);
+    //   return;
+    // }
 
-    const downloadUrl = LINK_DOWNLOAD_APK;
-    const downloadResumable = FileSystem.createDownloadResumable(
-      downloadUrl,
-      fileUri,
-      {},
-      (downloadProgress) => {
-        const percent =
-          downloadProgress.totalBytesWritten /
-          downloadProgress.totalBytesExpectedToWrite;
-        setProgress(percent);
-      }
-    );
+    // setPopupVisible(true);
 
-    downloadResumableRef.current = downloadResumable;
+    // const downloadUrl = LINK_DOWNLOAD_APK;
+    // const downloadResumable = FileSystem.createDownloadResumable(
+    //   downloadUrl,
+    //   fileUri,
+    //   {},
+    //   (downloadProgress) => {
+    //     const percent =
+    //       downloadProgress.totalBytesWritten /
+    //       downloadProgress.totalBytesExpectedToWrite;
+    //     setProgress(percent);
+    //   }
+    // );
 
-    try {
-      const result = await downloadResumable.downloadAsync();
+    // downloadResumableRef.current = downloadResumable;
 
-      if (result?.uri) {
-        setDownloadedUri(result.uri);
+    // try {
+    //   const result = await downloadResumable.downloadAsync();
 
-        // // Save file on local storage
-        const asset = await MediaLibrary.createAssetAsync(result.uri);
-        await MediaLibrary.createAlbumAsync("Apk", asset, false);
-      } else {
-        console.error(
-          "Le téléchargement a échoué ou n'a pas retourné de résultat."
-        );
-      }
-    } catch (e) {
-      setIsError(true);
-      console.error("Erreur de téléchargement :", e);
-    }
+    //   if (result?.uri) {
+    //     setDownloadedUri(result.uri);
+
+    //     // // Save file on local storage
+    //     // const asset = await MediaLibrary.createAssetAsync(result.uri);
+    //     // await MediaLibrary.createAlbumAsync("Apk", asset, false);
+    //     // Copie dans le stockage externe via MediaLibrary
+    //     // const asset = await MediaLibrary.createAssetAsync(result.uri);
+    //     // const album = await MediaLibrary.createAlbumAsync("Apk", asset, false);
+
+    //     // alert("Fichier enregistré dans :" + album.title);
+
+    //     // Utilise le chemin de l’asset pour l’installation
+    //     // const publicUri = asset.uri;
+
+    //     // setDownloadedUri(publicUri);
+    //   } else {
+    //     console.error(
+    //       "Le téléchargement a échoué ou n'a pas retourné de résultat."
+    //     );
+    //   }
+    // } catch (e) {
+    //   setIsError(true);
+    //   console.error("Erreur de téléchargement :", e);
+    // }
   };
 
   const installApk = (uri: string) => {
