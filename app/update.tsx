@@ -6,6 +6,7 @@ import {
   LINK_DOWNLOAD_APK,
   NAME_APK_FILE,
   UPDATE,
+  VERSION_STORIES,
 } from "@/constants/Texts";
 import { Color, Font, Size } from "@/styles";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -22,6 +23,7 @@ import { ProgressBar, Snackbar } from "react-native-paper";
 import Popup from "@/components/Popup";
 import * as IntentLauncher from "expo-intent-launcher";
 import * as FileSystem from "expo-file-system";
+import Accordion from "@/components/Accordion";
 
 const Update = () => {
   const [progress, setProgress] = useState(0);
@@ -122,6 +124,29 @@ const Update = () => {
     }
   };
 
+  const SectionItems = ({
+    title,
+    items,
+  }: {
+    title: string;
+    items?: string[];
+  }) => {
+    return (
+      <View>
+        <Text style={[Font.bodySb, { color: Color.primaryLighter }]}>
+          {title} :
+        </Text>
+        {items &&
+          items.map((item, index) => (
+            <Text
+              key={index}
+              style={[Font.subtitle, { marginLeft: Size.M }]}
+            >{`→ ${item}`}</Text>
+          ))}
+      </View>
+    );
+  };
+
   return (
     <>
       <ScrollView style={styles.mainContainer}>
@@ -155,8 +180,41 @@ const Update = () => {
                   color={Color.primaryLighter}
                 />
                 <Text style={Font.caption}>{LABEL.lastupdate}</Text>
+                <Text style={Font.caption}>{LABEL.lastupdatefr}</Text>
               </TouchableOpacity>
             </View>
+          </View>
+          <View>
+            {VERSION_STORIES.map((version, index) => (
+              <Accordion
+                key={index}
+                label={`${version.version} - ${version.date}`}
+                elementRNtoCollapse={
+                  <View style={{ gap: Size.M }}>
+                    {version.features && (
+                      <SectionItems
+                        title={UPDATE.features}
+                        items={version.features}
+                      />
+                    )}
+                    {version.featsongs && (
+                      <SectionItems
+                        title={UPDATE.featsongs}
+                        items={version.featsongs}
+                      />
+                    )}
+                    {version.fixsongs && (
+                      <SectionItems
+                        title={UPDATE.fixsongs}
+                        items={version.fixsongs}
+                      />
+                    )}
+                  </View>
+                }
+                isNeedBottomLine
+                isNeedPaddingBottom
+              />
+            ))}
           </View>
         </View>
       </ScrollView>
