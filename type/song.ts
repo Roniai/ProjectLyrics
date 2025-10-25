@@ -12,7 +12,7 @@ export type TSong = {
 
 export type TLyrics = {
   verses?: string[];
-  preChorus?: string;
+  preChorus?: string[];
   chorus?: string[];
   bridge?: string;
   intro?: string;

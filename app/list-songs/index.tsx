@@ -27,7 +27,13 @@ type SearchInputProps = {
 const ItemLyrics: React.FC<ItemLyricsProps> = ({ id, title, onPress }) => {
   return (
     <TouchableOpacity style={styles.itemContainer} onPress={onPress}>
-      <Text style={[Font.h5Sb, { color: Color.primaryLighter }]}>{id}</Text>
+      <MaterialCommunityIcons
+        name={"playlist-music-outline"}
+        color={Color.primaryLighter}
+        size={30}
+      />
+      {/** @todo: use number */}
+      {/* <Text style={[Font.h5Sb, { color: Color.primaryLighter }]}>{id}</Text> */}
       <Text style={[Font.body, { flex: 1, marginLeft: Size.M }]}>{title}</Text>
       <Entypo name="chevron-right" size={18} />
     </TouchableOpacity>
@@ -54,21 +60,22 @@ const ListSongsLyrics = () => {
   const [filteredLyrics, setFilteredLyrics] = useState<TSong[]>(lyrics);
 
   const handleSearch = (value: any) => {
-    if (!isNaN(value)) {
-      setFilteredLyrics(
-        lyrics.filter((lyric) => new RegExp(value).test(lyric.id.toString()))
-      );
-    } else {
-      setFilteredLyrics(
-        lyrics.filter((lyric) => new RegExp(value, "i").test(lyric.title))
-      );
-    }
+    /** @todo: search by id */
+    // if (!isNaN(value)) {
+    //   setFilteredLyrics(
+    //     lyrics.filter((lyric) => new RegExp(value).test(lyric.id.toString()))
+    //   );
+    // } else {
+    setFilteredLyrics(
+      lyrics.filter((lyric) => new RegExp(value, "i").test(lyric.title))
+    );
+    // }
   };
 
   return (
     <View style={styles.mainContainer}>
       <SearchInput
-        placeholder="Laharana na lohateny..."
+        placeholder="Hitady lohatenin-kira..."
         onChange={handleSearch}
       />
       <FlatList

@@ -4,11 +4,11 @@ import {
   CustomDrawerContent,
   ItemDrawer,
 } from "@/components/navigation/drawer-navigation/drawer-content/CustomDrawerContent";
-import { Color } from "@/styles";
+import { Color, Size } from "@/styles";
 import { SCREENS_DRAWER } from "@/constants/Screens";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
-import { SplashScreen } from "expo-router";
+import { SplashScreen, useRouter } from "expo-router";
 import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 
@@ -21,6 +21,7 @@ export default function Layout() {
     Poppins_SemiBold: require("../assets/fonts/Poppins-SemiBold.ttf"),
     Poppins_ExtraBold: require("../assets/fonts/Poppins-ExtraBold.ttf"),
   });
+  const router = useRouter();
 
   useEffect(() => {
     if (loaded) {
@@ -66,6 +67,19 @@ export default function Layout() {
                 />
               ),
               title: screen.title,
+              headerRight: () => (
+                <MaterialCommunityIcons
+                  name="arrow-left"
+                  size={30}
+                  onPress={() => {
+                    router.back();
+                  }}
+                  style={{
+                    marginRight: Size.M,
+                    display: screen.canGoBack ? "flex" : "none",
+                  }}
+                />
+              ),
             }}
           />
         ))}
