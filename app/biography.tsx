@@ -42,7 +42,7 @@ const Biography = () => {
         <SubTitle label={title} />
         <View style={styles.listContainer}>
           {assignments.map((assignment, index) => (
-            <Text style={Font.subtitleSb} key={index}>
+            <Text key={index} style={Font.subtitleSb}>
               - {assignment.label} :
               <Text style={Font.subtitle}> {assignment.details}</Text>
             </Text>
@@ -168,8 +168,8 @@ const Biography = () => {
         </Text>
         <View style={styles.coachContainer}>
           <View style={styles.coachNameContainer}>
-            {COACHS.map((coach) => (
-              <View style={styles.coachNameBlock}>
+            {COACHS.map((coach, index) => (
+              <View key={index} style={styles.coachNameBlock}>
                 <Text style={Font.subtitle}>Coach {coach.toUpperCase()}</Text>
               </View>
             ))}

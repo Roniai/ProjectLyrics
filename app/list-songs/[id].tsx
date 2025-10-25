@@ -164,7 +164,7 @@ const SongLyrics = () => {
     }
 
     if (lyrics?.preChorus) {
-      render.push({ text: lyrics?.preChorus, styles: [StyleText.BOLD] });
+      render.push({ text: lyrics?.preChorus[0], styles: [StyleText.ITALIC] });
     }
 
     if (lyrics?.chorus) {
@@ -182,8 +182,18 @@ const SongLyrics = () => {
       }
     }
 
+    if (lyrics?.preChorus && lyrics?.preChorus.length > 1) {
+      render.push({ text: lyrics?.preChorus[1], styles: [StyleText.ITALIC] });
+    }
+
     if (lyrics?.chorus && lyrics?.chorus.length > 1) {
       render.push({ text: lyrics?.chorus[1], styles: [StyleText.BOLD] });
+    } else if (
+      lyrics?.chorus &&
+      lyrics?.preChorus &&
+      lyrics?.preChorus.length > 1
+    ) {
+      render.push({ text: lyrics?.chorus[0], styles: [StyleText.BOLD] });
     }
 
     if (lyrics?.verses && lyrics.verses.length > 2) {
@@ -303,9 +313,15 @@ const SongLyrics = () => {
               <View style={styles.container}>
                 <View style={styles.titleContainer}>
                   <View style={styles.idBlock}>
-                    <Text style={[Font.h1Sb, { color: Color.white }]}>
+                    <MaterialCommunityIcons
+                      name={"playlist-music-outline"}
+                      color={Color.white}
+                      size={30}
+                    />
+                    {/** @todo: use number */}
+                    {/* <Text style={[Font.h1Sb, { color: Color.white }]}>
                       {item.id}
-                    </Text>
+                    </Text> */}
                   </View>
                   <View style={styles.titleBlock}>
                     <Text style={styles.title}>{item.title}</Text>
@@ -367,7 +383,7 @@ const SongLyrics = () => {
         >
           <MaterialCommunityIcons
             name="plus-circle"
-            size={28}
+            size={40}
             color={
               disableZoom.in ? Color.greyscaleDefault : Color.greyscaleDarker
             }
@@ -379,7 +395,7 @@ const SongLyrics = () => {
         >
           <MaterialCommunityIcons
             name="minus-circle"
-            size={28}
+            size={40}
             color={
               disableZoom.out ? Color.greyscaleDefault : Color.greyscaleDarker
             }
@@ -411,7 +427,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.secondaryDefault,
     justifyContent: "center",
     borderRadius: Size.S,
-    padding: Size.M,
+    padding: Size.S,
     paddingBottom: Size.S,
   },
   titleBlock: {
